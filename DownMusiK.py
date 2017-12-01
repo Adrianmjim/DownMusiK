@@ -18,6 +18,12 @@ list = pafy.get_playlist(lista)
 for i in list["items"]:
 	print ("Downloading and converting..."+i["pafy"].title)
 	filename = i["pafy"].getbestaudio().download(quiet=False)
+	title = ""
+	for j in i["pafy"].title:
+		if j == "<" or j == ">" or j == ":" or j == '"' or j == "/" or j == "|" or j == "?" or j == "*":
+			title += "$"
+		else:
+			title += j	
 	AudioSegment.from_file(filename).export("MusiK/"+title+".mp3", format="mp3")
 	os.remove(filename)
 print ("Ale, gozatelo!")
