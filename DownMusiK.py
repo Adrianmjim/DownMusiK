@@ -12,18 +12,22 @@ elif opcion == 2:
 else:
 	print ("Opcion erronea. Vuelve a ejecutar")
 	exit()
-os.mkdir("MusiK")
+if not os.path.exists("MusiK"):
+	os.mkdir("MusiK")
 print ("ONLY TEKNO ALLOWED")
 list = pafy.get_playlist(lista)
 for i in list["items"]:
-	print ("Downloading and converting..."+i["pafy"].title)
-	filename = i["pafy"].getbestaudio().download(quiet=False)
 	title = ""
 	for j in i["pafy"].title:
 		if j == "<" or j == ">" or j == ":" or j == '"' or j == "/" or j == "|" or j == "?" or j == "*":
 			title += "$"
 		else:
-			title += j	
-	AudioSegment.from_file(filename).export("MusiK/"+title+".mp3", format="mp3")
-	os.remove(filename)
+			title += j
+	if os.path.exists("MusiK/"+title+".mp3"):
+		print (title+" already exists.")
+	else:	
+		print ("Downloading and converting..."+title)
+		filename = i["pafy"].getbestaudio().download(quiet=False)
+		AudioSegment.from_file(filename).export("MusiK/"+title+".mp3", format="mp3")
+		os.remove(filename)
 print ("Ale, gozatelo!")
